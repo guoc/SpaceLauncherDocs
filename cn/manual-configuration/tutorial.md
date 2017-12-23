@@ -3,7 +3,7 @@ layout: doc
 title: "SpaceLauncher 自定义配置文件教程"
 ---
 
-**注：仅适用于 SpaceLauncher 1.5 以上版本**
+**注：仅适用于 SpaceLauncher 1.5 及其以上版本**
 
 SpaceLauncher 使用配置文件实现更复杂的按键动作。
 
@@ -14,6 +14,8 @@ SpaceLauncher 启动后，优先使用该文件中的配置，如果该文件不
 配置文件使用 [YAML](http://yaml.org) 格式，阅读这篇教程不需要了解 YAML。
 
 如果你发现文中使用了 YAML 的术语或者其它不清晰的词汇，请发邮件告诉我（guochen42@live.com）。
+
+这篇教程尽可能多地覆盖了 SpaceLauncher 配置文件的各个方面，尽量由易到难，你并不需要全部读完。
 
 # 预备知识
 
@@ -539,6 +541,111 @@ apps:
 
 可以看到模板动作和转换器的使用极大地减少了重复配置，如果不使用它们，我们得为每个需要设置快捷键的应用程序重复上面的配置。
 
+# group 的子参数
+
+之前在 [嵌套多个 group](#嵌套多个-group) 部分提到了三个更好的使用方案。
+
+- 方案一：`空格+G+D+R` 打开最近的文档，不松空格接着按 `S` 打开加星标的文档。
+
+- 方案二：`空格+G+D` 打开 Google Drive，接着按 `R` 打开最近的文档。
+
+- 方案三：`空格+G+D` 打开 Google Drive，接着按 `R` 直接在之前打开的 Google Drive 的标签页下打开最近的文档。
+
+## reset-to-previous-group-state-after-following-action
+
+让我们从第一个方案开始看起。
+
+之前的配置是这样的，
+
+```
+  G:
+    group:
+      M:
+        openurl:
+          https://mail.google.com
+      C:
+        openurl:
+          https://calendar.google.com
+      D:
+        group:
+          R:
+            openurl:
+              https://drive.google.com/drive/recent
+          S:
+            openurl:
+              https://drive.google.com/drive/starred
+```
+
+`空格+G+D+R` 之后必须按完整的 `空格+G+D+S` 才能触发相应动作。
+
+`group` 动作在成功触发动作或者遇到了未设定的按键时，会回到初始状态。
+
+我们可以通过子参数 `reset-to-previous-group-state-after-following-action` 使其在成功触发动作之后回到之前的某个 `group` 的状态。
+
+如果我们在下面这个位置的 `group` 中添加一行设置该参数为 `-1`，
+
+```
+...
+      D:
+        group:
+          reset-to-previous-group-state-after-following-action:
+            -1
+          R:
+            openurl:
+              https://drive.google.com/drive/recent
+          S:
+            openurl:
+              https://drive.google.com/drive/starred
+```
+
+这时，`空格+G+D+R` 打开最近的文档，不松空格接着按 `S` 就可以打开加星标的文档。
+
+你可能还想实现下面的效果，
+
+`空格+G+D+R` 打开最近的文档，不松空格接着按 `M` 就可以打开 Gmail，接着按 `D+R` 打开最近的文档，接着按 `D+S` 打开加星标的文档。
+
+只需要把上面的 `-1` 改为 `-2` 即可。
+
+## additional-action
+
+方案二中我们希望 `空格+G+D` 打开 Google Drive，不松空格接着按 `R` 打开最近的文档。可以通过 `group` 的另一个子参数 `additional-action` 在 `D` 所对应的 `group` 下为这个 `group` 设置一个额外的动作，在这里就是打开 Google Drive。
+
+```
+...
+      D:
+        group:
+          additional-action:
+            openurl:
+              https://drive.google.com
+          R:
+            openurl:
+              https://drive.google.com/drive/recent
+          S:
+            openurl:
+              https://drive.google.com/drive/starred
+```
+
+## 结合 openurl-in-current-tab.yaml
+
+方案三在方案二的基础上，要求 `空格+G+D` 打开 Google Drive 之后，不松空格接着按 `R` 能够在刚刚打开的 Google Drive 标签页上打开最近的文档。
+
+因为我们之前已经实现了 `openurl-in-current-tab.yaml`，将 `R` 和 `S` 对应的动作 `openurl` 改为 `openurl-in-current-tab.yaml` 即可。
+
+```
+...
+      D:
+        group:
+          additional-action:
+            openurl:
+              https://drive.google.com
+          R:
+            openurl-in-current-tab.yaml:
+              https://drive.google.com/drive/recent
+          S:
+            openurl-in-current-tab.yaml:
+              https://drive.google.com/drive/starred
+```
+
 # 制作动作
 
 模板动作方便我们把已有的动作组合起来，而要想实现新的功能，就需要制作新的动作了。
@@ -569,6 +676,8 @@ apps:
 ```
 
 至于 `say` 动作所对应文件的具体实现，其实只是一个 Bash 脚本，调用了系统的 say 命令。
+
+关于 SpaceLauncher 执行动作的具体细节，见 [SpaceLauncher 外部动作执行细节]({% link docs/cn/manual-configuration/action-execution-detail.md %})。
 
 ## 环境变量
 
