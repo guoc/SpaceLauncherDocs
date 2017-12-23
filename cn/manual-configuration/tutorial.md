@@ -162,7 +162,7 @@ actionsByKey:
 
 `空格+R` 重启 SpaceLauncher，按下 `空格+4`，就可以拖拽鼠标进行截屏了。
 
-## launch-and-cycle-windows.yaml 切换到指定 app，重复按键在应用内多个窗口间切换
+## launch-and-cycle-windows.yaml 切换到指定应用程序，重复按键在应用内多个窗口间切换
 
 把之前绑定到 F 的配置改成如下，
 
@@ -176,6 +176,24 @@ actionsByKey:
 
 注意动作名字末尾的 `.yaml` 不可省略。该动作是一个模板动作，下面会有介绍。
 
+## menu 执行菜单操作
+
+屏幕顶部的菜单栏提供了很多操作，我们可以通过 `menu` 动作代替手动点击或者预设快捷键。
+
+```
+...
+  U:
+    ## 对选中文字做摘要
+    menu:
+      - ThisApp
+      - Services
+      - Summarize
+```
+
+注意 menu 的参数是一个 sequence，不用在意这个概念，我们只需要注意它的格式，每个菜单项的名字前面都有一个连字符「- 」。
+
+`空格+R` 重启 SpaceLauncher，任意选中一长段文字，`空格+U` 试试效果。
+
 ## open-in-terminal 根据当前 Finder 窗口路径打开终端
 
 ```
@@ -186,7 +204,7 @@ actionsByKey:
       !!null "null"
 ```
 
-## quit-app 关闭指定 app
+## quit-app 关闭指定应用程序
 
 ```
 ...
@@ -296,7 +314,7 @@ actionsByKey:
 
 后面会有具体的例子。
 
-## 相同按键在不同 app 下执行不同动作
+## 相同按键在不同应用程序下执行不同动作
 
 Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `空格+B` 把它们统一。
 
@@ -324,23 +342,7 @@ Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `�
             { command, option }
 ```
 
-应用标识符的位置处如果设置为「default」，可以对应所有其它的 app。
-
-## menu 执行菜单操作
-
-屏幕顶部的菜单栏提供了很多操作，我们可以通过 `menu` 动作代替手动点击或者预设快捷键。
-
-```
-...
-  U:
-    ## 对选中文字做摘要
-    menu:
-      - ThisApp
-      - Services
-      - Summarize
-```
-
-`空格+R` 重启 SpaceLauncher，任意选中一长段文字，`空格+U` 试试效果。
+应用标识符的位置处如果设置为「default」，可以对应所有其它的应用程序。
 
 # 模板动作
 
