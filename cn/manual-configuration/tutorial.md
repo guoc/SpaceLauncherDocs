@@ -449,3 +449,195 @@ shell: |
   osascript -e 'tell application "$SL_FRONTMOST_APP_LOCALIZED_NAME" to set URL of active tab of window 1 to "$1"'
   osascript -e 'tell application "$SL_FRONTMOST_APP_LOCALIZED_NAME" to set the URL of the front document to "$1"'
 ```
+
+# 转换器
+
+上面的例子中，对于所有的应用程序，我们都使用了完整的路径，比如 `file:///System/Library/CoreServices/Finder.app`，我们也可以通过一个特殊的转换器 `APP_URL` 来获取完整路径。
+
+```
+...
+  F:
+    launch-and-cycle-windows.yaml:
+      APP_URL(Finder)
+```
+
+**注意**：`Finder` 的前后没有任何引号。
+
+这里的 `APP_URL` 就是一个转换器，它接受括号里的 `Finder` 作为参数，计算出 Finder 的路径，然后替换原来的位置。
+
+虽然可以用这样的方法获取每个应用程序的路径，但并不推荐这样做。比起直接给出一个准确的路径，使用转换器需要额外的计算，而这可能会在使用时导致延时。
+
+可每次输入完整路径确实很麻烦，这里给出一个动作，可以在编写配置文件时，将选中的应用程序的名字替换为相应的 URL 链接。
+
+```
+...
+  L:
+    ## 将选中的应用程序名称替换为相应的 URL 链接
+    shell: |
+      $SL_EXE action insert-text `$SL_EXE converter APP_URL $SL_SELECTED_TEXT_VIA_ACCESSIBILITY`
+```
+
+打开一个文本编辑器，输入并选中 `Finder`，`空格+L`，就会自动替换为 Finder 的 URL 链接。
+
+这个动作通过 SpaceLauncher 的命令行接口执行了转换器 `APP_URL` 和 动作 `insert-text`，之后会有详细介绍。
+
+另一个常见的转换器是 `APP_ID`，可以用来获取一个应用程序的 ID，动作 `apps`、`quit-app` 等须接受 ID 作为参数。
+
+# 转换器和模板动作的混合使用
+
+前文提到了 `launch-and-cycle-windows.yaml` 动作，通过这个动作，在按键切换到某个应用程序之后，重复按键可以在该应用程序内的多个窗口间切换。这是个一个内置的模板动作，位于 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/launch-and-cycle-windows.yaml`，文件内容如下。
+
+```
+apps:
+  APP_ID($1):
+    keystroke:
+      key: '`'
+      modifiers:
+        { command }
+  default:
+    openurl:
+      APP_URL($1)
+```
+
+当我们如下使用这个动作时，
+
+```
+  F:
+    launch-and-cycle-windows.yaml:
+      Finder
+```
+
+模板动作中的 `$1` 被替换为这个动作接收到的参数 `Finder`。
+
+```
+apps:
+  APP_ID(Finder):
+    keystroke:
+      key: '`'
+      modifiers:
+        { command }
+  default:
+    openurl:
+      APP_URL(Finder)
+```
+
+接着，转换器开始求值并替换相应位置。
+
+```
+apps:
+  com.apple.finder:
+    keystroke:
+      key: '`'
+      modifiers:
+        { command }
+  default:
+    openurl:
+      file:///System/Library/CoreServices/Finder.app
+```
+
+最后，动作开始执行，如果当前应用程序已经是 Finder，则通过 `keystroke` 动作模拟切换窗口的快捷键 `Command-\``，否则，如果当前应用程序是其它程序，则通过执行 `openurl` 动作跳转到 Finder。
+
+可以看到模板动作和转换器的使用极大地减少了重复配置，如果不使用它们，我们得为每个需要设置快捷键的应用程序重复上面的配置。
+
+# 制作动作
+
+模板动作方便我们把已有的动作组合起来，而要想实现新的功能，就需要制作新的动作了。
+
+每个动作本质上都是一个可执行文件，可以使用任何编程语言编写。SpaceLauncher 在配置文件中读到一个动作和它后面的参数时，会找到这个动作所对应的可执行文件，传入参数并执行这个可执行文件。
+
+一开始我们提到的动作 `say` 可以用来朗读指定文字。接下来，我们以 `say` 为例，介绍 SpaceLauncher 如何执行动作。
+
+如果之前的配置还保留着，可以看到，
+
+```
+...
+  W:
+    say:
+      world
+```
+
+当按下 `空格+W` 时，SpaceLauncher 检测到这组按键，查询配置文件看到需要执行 `say` 动作和相应的参数 `world`。
+
+首先，SpaceLauncher 依次在 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/` 和 `~/Library/Application Support/SpaceLauncher/actions/` 目录下找到名为 `say` 的可执行文件 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/say`。
+
+然后，执行该文件，同时将参数 `world` 传入。
+
+以上操作和在终端中执行以下命令效果完全相同。
+
+```
+/Applications/SpaceLauncher.app/Contents/MacOS/actions/say world
+```
+
+至于 `say` 动作所对应文件的具体实现，其实只是一个 Bash 脚本，调用了系统的 say 命令。
+
+## 环境变量
+
+SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入参数，还会传入一些特殊的环境变量，用于为动作提供可能需要的信息。
+
+- `SL_EXE`
+
+  SpaceLauncher 的命令行接口的可执行文件路径，目前位于 `/Applications/SpaceLauncher.app/Contents/MacOS/spacelauncher-cli`
+
+- `SL_FRONTMOST_APP_PATH`
+
+  当前应用程序路径
+
+- `SL_FRONTMOST_APP_LOCALIZED_NAME`
+
+  当前应用程序名称
+
+- `SL_FRONTMOST_APP_ID`
+
+  当前应用程序 ID
+
+- `SL_PRESSED_KEY`
+
+  触发该动作的按键名
+
+- `SL_PRESSED_KEY_CODE`
+
+  触发该动作的按键码
+
+- `SL_FRONTMOST_WINDOW_TITLE_VIA_ACCESSIBILITY`
+
+  通过 Accessibility 接口获取的当前应用程序窗口标题
+
+- `SL_SELECTED_TEXT_VIA_ACCESSIBILITY`
+
+  通过 Accessibility 接口获取的当前选中的文本
+
+- `SL_PASTEBOARD_TEXT`
+
+  当前剪贴板中的文本
+
+- `SL_FRONTMOST_FINDER_WINDOW_URL`
+
+  如果当前应用程序是 Finder，返回最前端的窗口所显示的文件夹的路径 URL。
+
+- `SL_FRONTMOST_FINDER_WINDOW_PATH`
+
+  如果当前应用程序是 Finder，返回最前端的窗口所显示的文件夹的路径。
+
+欢迎提出建议，添加你所需要的环境变量。
+
+## 命令行接口
+
+在一个动作的执行过程中，免不了要执行其它的动作，SpaceLauncher 的命令行接口可以被调用以执行其它动作。
+
+接口文件位于 `/Applications/SpaceLauncher.app/Contents/MacOS/spacelauncher-cli`，建议通过环境变量 `SL_EXE` 获取。
+
+注意，执行该文件时需保证 SpaceLauncher 主程序已运行。
+
+执行该文件有以下三种格式。
+
+- `$SL_EXE action *action_name* *action_argument*`
+
+  执行 `*action_name*` 所指的动作并传入 `*action_argument*` 作为其参数。执行后立即返回。
+
+- `$SL_EXE action-sync *action_name* *action_argument*`
+
+  同上，但等待动作执行结束后返回。
+
+- `$SL_EXE actionYAML *action_and_argument_in_YAML*`
+
+  如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: { shift } }'`。
