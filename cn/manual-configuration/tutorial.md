@@ -170,6 +170,7 @@ actionsByKey:
 
 ```
   F:
+    ## 打开 Finder 并切换应用内窗口
     launch-and-cycle-windows.yaml:
       file:///System/Library/CoreServices/Finder.app
 ```
@@ -267,19 +268,25 @@ actionsByKey:
 
 ```
   G:
+    ## Google 服务
     group:
       M:
+        ## Gmail
         openurl:
           https://mail.google.com
       C:
+        ## Google Calendar
         openurl:
           https://calendar.google.com
       D:
+        ## Google Drive
         group:
           R:
+            ## 最近的文档
             openurl:
               https://drive.google.com/drive/recent
           S:
+            ## 加星标的文档
             openurl:
               https://drive.google.com/drive/starred
 ```
@@ -323,6 +330,7 @@ Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `�
 ```
 ...
   B:
+    ## 浏览器的书签管理器
     apps:
       org.mozilla.firefox:
         keystroke:
@@ -371,6 +379,7 @@ menu:
 ```
 ...
   U:
+    ## 对选中的文字做摘要
     summarize.yaml:
       !!null "null"
 ```
@@ -396,6 +405,7 @@ menu:
 这几个操作都可以分别用之前提到的动作实现。比如，下面的配置实现了在当前标签页下打开 `https://drive.google.com/drive/starred`。
 
 ```
+# 在当前标签页下打开链接
 actions-one-by-one:
   - keystroke:
       key:
@@ -412,6 +422,7 @@ actions-one-by-one:
 我们可以把这段代码放到一个单独的模板动作文件中，但是这个模板动作只能打开一个固定的链接，意义不大。这时我们就可以使用模板动作的参数了。把上面例子中的固定链接替换为 `$1`，并保存为一个模板动作，`openurl-in-current-tab.yaml`，注意不要忘了 `.yaml` 的文件后缀。文件内容如下，
 
 ```
+# 在当前标签页下打开链接
 actions-one-by-one:
   - keystroke:
       key:
@@ -446,7 +457,8 @@ actions-one-by-one:
 其实如果只使用 Safari 和 Google Chrome，可以通过 AppleScript 设置当前标签页的链接，不需要模拟按键的过程。
 
 ```
-# openurl-in-current-tab-via-applescript.yaml
+# 通过 AppleScript 在当前标签页下打开链接
+# 保存在 actions/openurl-in-current-tab-via-applescript.yaml
 shell: |
   osascript -e 'tell application "$SL_FRONTMOST_APP_LOCALIZED_NAME" to set URL of active tab of window 1 to "$1"'
   osascript -e 'tell application "$SL_FRONTMOST_APP_LOCALIZED_NAME" to set the URL of the front document to "$1"'
@@ -459,6 +471,7 @@ shell: |
 ```
 ...
   F:
+    ## 打开 Finder 并切换应用内窗口
     launch-and-cycle-windows.yaml:
       APP_URL(Finder)
 ```
@@ -505,6 +518,7 @@ apps:
 
 ```
   F:
+    ## 打开 Finder 并切换应用内窗口
     launch-and-cycle-windows.yaml:
       Finder
 ```
