@@ -772,3 +772,32 @@ SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入
 - `$SL_EXE actionYAML *action_and_argument_in_YAML*`
 
   如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: { shift } }'`。
+
+
+# 其它设置
+
+## 修改热键
+
+空格键作为热键除了本身的优势以外，本身又是一个常用按键，不可避免地会发生冲突，SpaceLauncher 使用了多种方法避免这个冲突，但带来了少量延迟，或者在少数情况下不能正常使用。
+
+### 设置空格以外的热键
+
+除了空格，还可以设置通过其它按键触发，但是注意，这个额外设置的热键将会失去本来的功能，所以我们需要选择那些用不到的按键。
+
+```
+extraHotKey:
+  F20
+...
+```
+
+然后通过 [Karabiner-Elements](https://pqrs.org/osx/karabiner/) 将那些 SpaceLauncher 不支持的按键（比如 CapsLock）再映射到上面的 `F20`。
+
+### 禁用空格热键
+
+```
+spaceHotKeyDisabled:
+  true
+...
+```
+
+这样就可以只使用额外设置的热键触发动作了。
