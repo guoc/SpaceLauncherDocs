@@ -773,6 +773,9 @@ SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入
 
   如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: { shift } }'`。
 
+# 从其它应用程序执行 SpaceLauncher 动作
+
+SpaceLauncher 中的动作，不管是内置的，还是用户自己创建的，都可以通过上面介绍的[命令行接口](#命令行接口)从其它应用程序调用，这样极大地扩展了动作的使用范围。
 
 # 其它设置
 
