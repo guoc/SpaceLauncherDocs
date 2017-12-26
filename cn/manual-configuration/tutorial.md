@@ -510,7 +510,7 @@ shell: |
 
 # 转换器和模板动作的混合使用
 
-前文提到了 `launch-and-cycle-windows.yaml` 动作，通过这个动作，在按键切换到某个应用程序之后，重复按键可以在该应用程序内的多个窗口间切换。这是个一个内置的模板动作，位于 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/launch-and-cycle-windows.yaml`，文件内容如下。
+前文提到了 `launch-and-cycle-windows.yaml` 动作，通过这个动作，在按键切换到某个应用程序之后，重复按键可以在该应用程序内的多个窗口间切换。这是个一个内置的模板动作，位于 `/Applications/SpaceLauncher.app/Contents/SharedSupport/actions/launch-and-cycle-windows.yaml`，文件内容如下。
 
 ```
 apps:
@@ -689,14 +689,14 @@ apps:
 
 当按下 `空格+W` 时，SpaceLauncher 检测到这组按键，查询配置文件看到需要执行 `say` 动作和相应的参数 `world`。
 
-首先，SpaceLauncher 依次在 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/` 和 `~/Library/Application Support/SpaceLauncher/actions/` 目录下找到名为 `say` 的可执行文件 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/say`。
+首先，SpaceLauncher 依次在 `/Applications/SpaceLauncher.app/Contents/MacOS/actions/`、`/Applications/SpaceLauncher.app/Contents/SharedSupport/actions/` 和 `~/Library/Application Support/SpaceLauncher/actions/` 目录下找到名为 `say` 的可执行文件 `/Applications/SpaceLauncher.app/Contents/SharedSupport/actions/say`。
 
 然后，执行该文件，同时将参数 `world` 传入。
 
 以上操作和在终端中执行以下命令效果完全相同。
 
 ```
-/Applications/SpaceLauncher.app/Contents/MacOS/actions/say world
+/Applications/SpaceLauncher.app/Contents/SharedSupport/actions/say world
 ```
 
 至于 `say` 动作所对应文件的具体实现，其实只是一个 Bash 脚本，调用了系统的 say 命令。
