@@ -3,7 +3,7 @@ layout: doc
 title: "SpaceLauncher 自定义配置文件教程"
 ---
 
-**注：仅适用于 SpaceLauncher 1.5 及其以上版本**
+**注：仅适用于 SpaceLauncher 1.5.0-alpha.14 及其以上版本**
 
 SpaceLauncher 使用配置文件实现更复杂的按键动作。
 
@@ -761,19 +761,17 @@ SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入
 
 注意，执行该文件时需保证 SpaceLauncher 主程序已运行。
 
-执行该文件有以下三种格式。
+执行该文件有以下两种格式。
 
-- `$SL_EXE action *action_name* *action_argument*`
+- `$SL_EXE action [--sync] *action_name* *action_argument*`
 
-  执行 `*action_name*` 所指的动作并传入 `*action_argument*` 作为其参数。执行后立即返回。
+  执行 `*action_name*` 所指的动作并传入 `*action_argument*` 作为其参数。
 
-- `$SL_EXE action-sync *action_name* *action_argument*`
-
-  同上，但等待动作执行结束后返回。
-
-- `$SL_EXE actionYAML *action_and_argument_in_YAML*`
+- `$SL_EXE actionYAML [--sync] *action_and_argument_in_YAML*`
 
   如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: { shift } }'`。
+
+以上两种格式默认都是执行后立即返回，如果需要等待动作执行结束后返回，可以传入 `--sync` 选项。
 
 # 从其它应用程序执行 SpaceLauncher 动作
 
