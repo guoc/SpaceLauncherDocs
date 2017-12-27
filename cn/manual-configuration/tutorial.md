@@ -751,6 +751,14 @@ SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入
 
   如果当前应用程序是 Finder，返回最前端的窗口所显示的文件夹的路径。
 
+- `SL_FRONTMOST_SAFARI_DOCUMENT_URL`
+
+  如果当前应用程序是 Safari，返回最前端的文档的 URL。
+  
+- `SL_FRONTMOST_GOOGLE_CHROME_TAB_URL`
+
+  如果当前应用程序是 Google Chrome，返回最前端的标签页的 URL。
+
 欢迎提出建议，添加你所需要的环境变量。
 
 ## 命令行接口
