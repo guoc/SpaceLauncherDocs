@@ -13,7 +13,7 @@ SpaceLauncher 启动后，优先使用该文件中的配置，如果该文件不
 
 配置文件使用 [YAML](http://yaml.org) 格式，阅读这篇教程不需要了解 YAML。
 
-如果你发现文中使用了 YAML 的术语或者其它不清晰的词汇，请发邮件告诉我（guochen42@live.com）。
+如果你发现文中使用了 YAML 的术语或者其它不清晰的词汇，请发[邮件](mailto:guochen@live.com)（guochen@live.com）告诉我。
 
 这篇教程尽可能多地覆盖了 SpaceLauncher 配置文件的各个方面，尽量由易到难，你并不需要全部读完。
 
