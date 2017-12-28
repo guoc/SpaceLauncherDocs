@@ -62,7 +62,7 @@ actionsByKey:
 
 保存，在弹出的保存窗口下，按 `Shift-Command-G` 跳转到目录 `~/Library/Application Support/SpaceLauncher/`，然后输入文件名 `custom.yaml`，保存。
 
-重启 SpaceLauncher 后，调整系统音量，避免吓着身边的人。按住空格，按 `H`，就会听到「hello」的发音，按 `W` 就会听到「world」的发音。
+重启 SpaceLauncher 后，调整系统音量，避免吓着身边的人。按住空格，同时按下 `H`，就会听到「hello」的发音，按 `W` 就会听到「world」的发音。
 
 这个配置文件中，顶级是 `actionsByKey`，按键和动作的关系都必须在它的下级定义，所以需要注意空格缩进。
 
