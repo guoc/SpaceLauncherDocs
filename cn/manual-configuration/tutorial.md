@@ -707,6 +707,8 @@ apps:
 
 SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入参数，还会传入一些特殊的环境变量，用于为动作提供可能需要的信息。
 
+注：对于可执行文件类型的动作，和计算机进程中的环境变量一样，在动作被调用时传入动作所在的进程。对于模板动作，由于是文本文件，在被调用时会替换其中的环境变量文本。
+
 - `SL_EXE`
 
   SpaceLauncher 的命令行接口的可执行文件路径，目前位于 `/Applications/SpaceLauncher.app/Contents/MacOS/spacelauncher-cli`
