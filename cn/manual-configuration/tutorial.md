@@ -89,7 +89,7 @@ actionsByKey:
 
 上面提到的 `say` 是一个动作，下面介绍一些常用动作。
 
-## openurl打开链接
+## 打开链接 openurl
 
 这个动作接受一个链接作为参数。比如我们想通过 `空格+G` 打开 Google 的主页。
 
@@ -128,7 +128,7 @@ actionsByKey:
 
 注意，按键名称所在行的下一行如果是以 `##` 开始的注释，注释的内容会出现在提示窗口中，长按空格就会出现。
 
-## dict 查字典
+## 查字典 dict
 
 用系统自带的字典查询当前选中的文字。这个动作能自己获取当前选中的文字，本身不需要任何参数，但为了保持一致，我们需要给它一个空参数。
 
@@ -142,7 +142,7 @@ actionsByKey:
 
 按 `空格+R` 重启 SpaceLauncher，选中一个单词，`空格+D`，SpaceLauncher 就会用系统自带词典查询该单词，如果没有选中文字，也会打开字典。
 
-## insert-text 插入文字
+## 插入文字 insert-text
 
 上面 `dict` 动作的例子中需要输入 `!!null "null"`，每次输入很麻烦，还容易输错，insert-text 这个动作可以帮助我们插入一段文字。
 
@@ -158,7 +158,7 @@ actionsByKey:
 
 别忘了 `空格+R` 重启 SpaceLauncher。
 
-## keystroke 模拟按键
+## 模拟按键 keystroke
 
 上面例子中的动作后面都跟了一个参数，如果一个动作需要更多的信息该怎么办？动作 `keystroke` 就是这样一个例子。
 
@@ -179,7 +179,9 @@ actionsByKey:
 
 `空格+R` 重启 SpaceLauncher，按下 `空格+4`，就可以拖拽鼠标进行截屏了。
 
-## launch-and-cycle-windows.yaml 切换到指定应用程序，重复按键在应用内多个窗口间切换
+## 特定应用内窗口切换 launch-and-cycle-windows.yaml
+
+打开或切换到指定应用程序，如果当前已经是该应用，则在应用内多个窗口间切换。
 
 把之前绑定到 F 的配置改成如下，
 
@@ -194,7 +196,7 @@ actionsByKey:
 
 注意动作名字末尾的 `.yaml` 不可省略。该动作是一个模板动作，下面会有介绍。
 
-## menu 执行菜单操作
+## 执行菜单操作 menu
 
 屏幕顶部的菜单栏提供了很多操作，我们可以通过 `menu` 动作代替手动点击或者预设快捷键。
 
@@ -212,7 +214,7 @@ actionsByKey:
 
 `空格+R` 重启 SpaceLauncher，任意选中一长段文字，`空格+U` 试试效果。
 
-## open-in-terminal 根据当前 Finder 窗口路径打开终端
+## 根据当前 Finder 窗口路径打开终端 open-in-terminal
 
 ```
 ...
@@ -222,7 +224,7 @@ actionsByKey:
       !!null "null"
 ```
 
-## quit-app 关闭指定应用程序
+## 关闭指定应用程序 quit-app
 
 ```
 ...
@@ -232,7 +234,7 @@ actionsByKey:
       com.apple.finder
 ```
 
-## shell 执行命令行
+## 执行命令行 shell
 
 ```
 ...
@@ -243,7 +245,7 @@ actionsByKey:
 ```
 
 
-# group 依次按多个键执行动作
+# 依次按多个键执行动作 group
 
 键盘上按得顺手的键就那么多，比如给 Google 家的各项服务都绑定了快捷键，很快就会发现键不够用了。如果能这样就好了，`空格+G+M` 打开 Gmail，`空格+G+C` 打开 Google Calendar，`空格+G+D` 打开 Google Drive。这就是 `group` 这个动作要做的。
 
@@ -320,7 +322,7 @@ actionsByKey:
 
 这里开始，可能需要一些相关知识，但并不复杂。
 
-## actions-one-by-one actions-at-once 一次按键执行多个动作
+## 一次按键执行多个动作 actions-one-by-one actions-at-once
 
 前者是依次执行多个动作，后者是同时执行。
 
