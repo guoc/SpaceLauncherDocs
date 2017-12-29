@@ -3,7 +3,7 @@ layout: doc
 title: "SpaceLauncher 自定义配置文件教程"
 ---
 
-**注：仅适用于 SpaceLauncher 1.5.0-alpha.14 及其以上版本**
+**注：仅适用于 SpaceLauncher 1.5.0-alpha.15 及其以上版本**
 
 SpaceLauncher 使用配置文件实现更复杂的按键动作。
 
@@ -172,10 +172,10 @@ actionsByKey:
       key:
         4
       modifiers:
-        { shift, command }
+        [ shift, command ]
 ```
 
-注意这里 `modifiers` 下的值 `{ shift, command }` 比较特殊，是一个集合。它是什么不重要，重要的是按照这个格式把需要的修饰符（`shift`/`command`/`option`/`control`）用逗号分割，放在大括号里即可。
+注意这里 `modifiers` 下的值 `[ shift, command ]` 比较特殊，是一个 sequence。它是什么不重要，重要的是按照这个格式把需要的修饰键（`shift`/`command`/`option`/`control`）用逗号分割，放在方括号里即可。
 
 `空格+R` 重启 SpaceLauncher，按下 `空格+4`，就可以拖拽鼠标进行截屏了。
 
@@ -208,7 +208,7 @@ actionsByKey:
       - Summarize
 ```
 
-注意 menu 的参数是一个 sequence，不用在意这个概念，我们只需要注意它的格式，每个菜单项的名字前面都有一个连字符「- 」。
+注意 `menu` 的参数和 `keystroke` 一样，也是一个 sequence，但因为这里菜单项的名字可能比较长，我们使用了 sequence 的另外一种格式，注意每个菜单项的名字前面都有一个连字符「- 」。
 
 `空格+R` 重启 SpaceLauncher，任意选中一长段文字，`空格+U` 试试效果。
 
@@ -352,19 +352,19 @@ Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `�
           key:
             B
           modifiers:
-            { command, shift }
+            [ command, shift ]
       com.apple.Safari:
         keystroke:
           key:
             B
           modifiers:
-            { command, option }
+            [ command, option ]
       com.google.Chrome:
         keystroke:
           key:
             B
           modifiers:
-            { command, option }
+            [ command, option ]
 ```
 
 应用标识符的位置处如果设置为「default」，可以对应所有其它的应用程序。
@@ -426,7 +426,7 @@ actions-one-by-one:
       key:
         L
       modifiers:
-        { command }
+        [ command ]
   - insert-text:
       https://drive.google.com/drive/starred
   - keystroke:
@@ -443,7 +443,7 @@ actions-one-by-one:
       key:
         L
       modifiers:
-        { command }
+        [ command ]
   - insert-text:
       $1
   - keystroke:
@@ -523,7 +523,7 @@ apps:
     keystroke:
       key: '`'
       modifiers:
-        { command }
+        [ command ]
   default:
     openurl:
       APP_URL($1)
@@ -546,7 +546,7 @@ apps:
     keystroke:
       key: '`'
       modifiers:
-        { command }
+        [ command ]
   default:
     openurl:
       APP_URL(Finder)
@@ -560,7 +560,7 @@ apps:
     keystroke:
       key: '`'
       modifiers:
-        { command }
+        [ command ]
   default:
     openurl:
       file:///System/Library/CoreServices/Finder.app
@@ -784,7 +784,7 @@ SpaceLauncher 在执行一个动作所对应的可执行文件时，除了传入
 
 - `$SL_EXE actionYAML [--sync] *action_and_argument_in_YAML*`
 
-  如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: { shift } }'`。
+  如果动作及其参数本身已经以 YAML 格式的字符串表示，可直接传入。比如 `$SL_EXE actionYAML 'keystroke: { key: V, modifiers: [ shift ] }'`。
 
 以上两种格式默认都是执行后立即返回，如果需要等待动作执行结束后返回，可以传入 `--sync` 选项。
 
