@@ -566,7 +566,7 @@ apps:
       file:///System/Library/CoreServices/Finder.app
 ```
 
-最后，动作开始执行，如果当前应用程序已经是 Finder，则通过 `keystroke` 动作模拟切换窗口的快捷键 `Command-\``，否则，如果当前应用程序是其它程序，则通过执行 `openurl` 动作跳转到 Finder。
+最后，动作开始执行，如果当前应用程序已经是 Finder，则通过 `keystroke` 动作模拟切换窗口的快捷键 `` Command-` ``，否则，如果当前应用程序是其它程序，则通过执行 `openurl` 动作跳转到 Finder。
 
 可以看到模板动作和转换器的使用极大地减少了重复配置，如果不使用它们，我们得为每个需要设置快捷键的应用程序重复上面的配置。
 
