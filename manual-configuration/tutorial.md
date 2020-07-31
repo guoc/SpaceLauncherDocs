@@ -1,21 +1,19 @@
 ---
 layout: doc
-title: "SpaceLauncher 自定义配置文件指南"
+title: "SpaceLauncher Configuration File Tutorial"
 ---
 
-**注：仅适用于 SpaceLauncher 1.5.0-alpha.15 及其以上版本**
+**Requires SpaceLauncher 1.5.0-beta.1 or later**
 
-SpaceLauncher 使用配置文件实现更复杂的按键动作。
+SpaceLauncher provides complex settings via the configuration file at `~/Library/Application Support/SpaceLauncher/custom.yaml`.
 
-配置文件位于 `~/Library/Application Support/SpaceLauncher/custom.yaml`。
+After being launched, SpaceLauncher tries to load the configuration file first. If the file doesn't exist, then the actions settings in Preferences Windows take effect.
 
-SpaceLauncher 启动后，优先使用该文件中的配置，如果该文件不存在，则调用之前在图形化界面下进行的设置。
+The configuration file's format is [YAML](http://yaml.org), but YAML is not prerequisite for understanding this tutorial.
 
-配置文件使用 [YAML](http://yaml.org) 格式，阅读这篇教程不需要了解 YAML。
+If you find any unexplained YAML terminologies or ambiguous words, please [email me](mailto:guochen@live.com) (guochen@live.com).
 
-如果你发现文中使用了未加说明的 YAML 术语或者其它不清晰的词汇，请发[邮件](mailto:guochen@live.com)（guochen@live.com）告诉我。
-
-这篇教程尽可能多地覆盖了 SpaceLauncher 配置文件的各个方面，尽量由易到难，你并不需要全部读完就可以开始使用。
+This tutorial tries to cover all features about SpaceLauncher configuration files. It is not necessary to finish the whole tutorial before using SpaceLauncher configuration files.
 
 ---
 
@@ -24,36 +22,36 @@ SpaceLauncher 启动后，优先使用该文件中的配置，如果该文件不
 
 ---
 
-# 基本结构
+# Structure
 
-每行配置用行首的**空格**缩进表示层级关系，如下，
+The spaces indentations at the head of every line in configuration files are used to indicate lines' hierarchy.
 
 ```
-顶级:
-  # 这是注释
-  一级:
-    二级:
-      最低级
-    二级:
-      三级:
-        最低级
+Root Level:
+  # This is a comment
+  First Level:
+    Second Level:
+      Leaf Level
+    Second Level:
+      Third Level:
+        Leaf Level
 ```
 
-如果一个级别有子级，那它后面需要有英文冒号。
+The levels which have sub-levels must be followed by `:`.
 
-相同空格缩进的行表示同一级别，如上面例子中的「二级」。
+The lines which have the same spaces indentations are in a same level, such as the `Second Level` above.
 
-最低级可以是一些值，比如一段文字、一个数值等。
+The leaf level could be text, a value, etc.
 
-以 `#` 开始的部分是注释，不起作用。
+The line starting with `#` is a comment. Comments are not parsed as a part of the configuration.
 
-以上就是使用 `custom.yaml` 所需的绝大部分知识了。
+The above is almost all you need to use the configuration file.
 
-接下来，让我们从简单的配置开始。
+Let's get started with a simple configuration file.
 
-首先，你需要有一个纯文本编辑器，如果没有，推荐 [CotEditor](https://coteditor.com)。
+First, you'll need a plain text editor (such as [CotEditor](https://coteditor.com)).
 
-打开纯文本编辑器，复制粘贴以下文字。
+Open the plain text editor, copy and paste the following text.
 
 ```
 actionsByKey:
@@ -65,33 +63,33 @@ actionsByKey:
       world
 ```
 
-保存，在弹出的保存窗口下，按 `Shift-Command-G` 跳转到目录 `~/Library/Application Support/SpaceLauncher/`，然后输入文件名 `custom.yaml`，保存。
+Save, in the dialog window, press `Shift-Command-G` and go to `~/Library/Application Support/SpaceLauncher/` folder, enter the file name `custom.yaml`，save.
 
-重启 SpaceLauncher 后，调整系统音量，避免吓着身边的人。按住空格，同时按下 `H`，就会听到「hello」的发音，按 `W` 就会听到「world」的发音。
+Restart SpaceLauncher, holding space bar and press `H`, you will hear "hello", press `H` for "world".
 
-这个配置文件中，顶级是 `actionsByKey`，按键和动作的关系都必须在它的下级定义，所以需要注意空格缩进。
+In this configuration file, the root level is `actionsByKey`, under which the relationships between keys and actions are defined.
 
-`H`、`W` 都是 `actionsByKey` 的下一级，这一级只能是按键的名称。
+`actionsByKey`'s sub-level has to be keys' names, such as `H`, `W`.
 
-在它们各自的下一级是该按键所对应的动作，上面例子中都是 say，其它动作会在后面介绍。
+The sub-level of keys' names includes their corresponding actions (e.g., `say` in the above example). Actions' details will be given later.
 
-动作的下一级必须是该动作的参数，也就是执行该动作所需要的信息。上面的例子中，两个 `say` 的参数分别是 `hello` 和 `world`，它们都是一段文字。对于其它动作，参数也可能是一个数值或者其它，这取决于具体的动作。
+The sub-level of an action has to be its action argument, which provides the information to execute the action. In the above example, the two `say` actions have `hello` and `world` as their action arguments correspondingly. In the example, they are text, but action arguments may be a value or other types. An action argument's type depends on the action's requirement.
 
-## 可用的按键
+## Available Keys
 
-除了上面用到的 `H` 和 `W`，SpaceLauncher 支持键盘上的大部分按键。
+In addition to the above `H` and `W`, SpaceLauncher supports most keys on a keyboard.
 
-点击这个链接 [spacelauncher://available-keys](spacelauncher://available-keys) 会使 SpaceLauncher 根据当前键盘布局生成可用按键。
+Click this link [spacelauncher://available-keys](spacelauncher://available-keys), then SpaceLauncher will generate available keys based on current keyboard layout.
 
-这里的按键中都包含了引号，推荐除了字母和单个数字以外的其它按键都使用这里的格式。
+All generated keys are enclosed by single or double quotes, which are recommended for all non-alphanumeric keys. For alphanumeric keys, it is safe not to use quotes.
 
-# 常用动作
+# Common Actions
 
-上面提到的 `say` 是一个动作，下面介绍一些常用动作。
+The above `say` is an action. I will show you more common actions in this section.
 
-## 打开链接 openurl
+## Open URL `openurl`
 
-这个动作接受一个链接作为参数。比如我们想通过 `空格+G` 打开 Google 的主页。
+This action receives a link as its argument. For example, we want to open Google via `Space+G`.
 
 ```
 ...
@@ -100,9 +98,9 @@ actionsByKey:
       https://google.com
 ```
 
-重启 SpaceLauncher，尝试上面的动作。
+Restart SpaceLauncher and have a try.
 
-这个链接也可以是本地文件、文件夹或者应用程序，比如，`空格+F` 打开 Finder，`空格+S` 打开 Safari。
+The link could also a local file, folder or application. e.g., `Space+F` to open Finder, `Space+S` to open Safari.
 
 ```
 ...
@@ -114,60 +112,60 @@ actionsByKey:
       file:///Applications/Safari.app
 ```
 
-每次修改配置之后都需要重启 SpaceLauncher，很麻烦。这里我们通过打开一个特殊的链接来重启 SpaceLauncher。
+After changes on the configuration file, we have to restart SpaceLauncher manually. We can create a shortcut for restarting SpaceLauncher via opening a special URL.
 
 ```
 ...
   R:
-    ## 重启 SpaceLauncher
+    ## Restart SpaceLauncher
     openurl:
       spacelauncher://relaunch
 ```
 
-最后一次手动重启 SpaceLauncher，之后就可以通过 `空格+R` 重启 SpaceLauncher 了。
+After restarting SpaceLauncher manually, then we can restart SpaceLauncher by `Space+R`.
 
-注意，按键名称所在行的下一行如果是以 `##` 开始的注释，注释的内容会出现在提示窗口中，长按空格就会出现。
+Note: If the comment line below a key name starts with `##`, the comment content will be displayed in the hint window (hold space bar to show the hint window).
 
-## 查字典 dict
+## Look Up in Dictionary `dict`
 
-用系统自带的字典查询当前选中的文字。这个动作能自己获取当前选中的文字，本身不需要任何参数，但为了保持一致，我们需要给它一个空参数。
+Look up selected text by Dictionary.app. This action can get the current selected text. It does not need any argument, but for consistence, we have to pass it an empty argument.
 
 ```
 ...
   D:
-    ## 在系统字典中查询当前选中的文字
+    ## Loop up selected text by Dictionary.app
     dict:
       !!null "null"
 ```
 
-按 `空格+R` 重启 SpaceLauncher，选中一个单词，`空格+D`，SpaceLauncher 就会用系统自带词典查询该单词，如果没有选中文字，也会打开字典。
+Now press `Space+R` to restart SpaceLauncher, then select a text, `Space+D`, SpaceLauncher will look up the text in Dictionary.app. If there is no text selected, Dictionary app will also be launched.
 
-## 插入文字 insert-text
+## Insert Text `insert-text`
 
-上面 `dict` 动作的例子中需要输入 `!!null "null"`，每次输入很麻烦，还容易输错，insert-text 这个动作可以帮助我们插入一段文字。
+In the above example of `dict` action, we need to type `!!null "null"`. It is boring and error-prone. The action `insert-text` can help us insert the text.
 
 ```
 ...
   E:
-    ## 插入 YAML 空参数
+    ## Insert YAML empty argument
     insert-text:
       '!!null "null"'
 ```
 
-注意要插入的文字得用英文单引号括住。
+Note the inserted text need to be enclosed by single quotes.
 
-别忘了 `空格+R` 重启 SpaceLauncher。
+Don't forget to `Space+R` to restart SpaceLauncher.
 
-## 模拟按键 keystroke
+## Simulate Keystroke `keystroke`
 
-上面例子中的动作后面都跟了一个参数，如果一个动作需要更多的信息该怎么办？动作 `keystroke` 就是这样一个例子。
+All the actions in the previous examples are followed by an argument. How can we pass more information to an action? The action `keystroke` is an example of passing more information.
 
-比如我们要模拟截屏快捷键 `Shift-Command-4`，这里包括主键 `4`、修饰键 `Shift` 和 `Command`。我们给 `keystroke` 又加了两个下级，`key` 表示主键，`modifiers` 表示修饰键，它们又有各自的值。
+For example, we want to simulate the keystroke `Shift-Command-4` to take a screenshot. The necessary information includes a main key `4` and two modifier keys `Shift` and `Command`. We add sub-levels `key` and `modifiers` with their corresponding values.
 
 ```
 ...
   4:
-    ## 截屏
+    ## Take a screenshot
     keystroke:
       key:
         4
@@ -175,85 +173,85 @@ actionsByKey:
         [ shift, command ]
 ```
 
-注意这里 `modifiers` 下的值 `[ shift, command ]` 比较特殊，是一个 sequence。它是什么不重要，重要的是按照这个格式把需要的修饰键（`shift`/`command`/`option`/`control`）用逗号分割，放在方括号里即可。
+Note the `modifiers`'s value `[ shift, command ]` is special, which is a sequence in YAML. What does the sequence mean is not important. Follow the format: separate necessary modifiers (`shift`/`command`/`option`/`control`) by comma, and enclose all the modifiers with brackets.
 
-`空格+R` 重启 SpaceLauncher，按下 `空格+4`，就可以拖拽鼠标进行截屏了。
+`Space+R` to relaunch SpaceLauncher, then press `Space+4` and select an area to take a screenshot.
 
-## 特定应用内窗口切换 launch-and-cycle-windows.yaml
+## Cycle Windows in a Specified App `launch-and-cycle-windows.yaml`
 
-打开或切换到指定应用程序，如果当前已经是该应用，则在应用内多个窗口间切换。
+Launch or switch to a specified app. If the app is already frontmost, cycle the windows in the app.
 
-把之前绑定到 F 的配置改成如下，
+Now change the previous configuration for `F` to the following.
 
 ```
   F:
-    ## 打开 Finder 并切换应用内窗口
+    ## Launch Finder and cycle windows in Finder
     launch-and-cycle-windows.yaml:
       file:///System/Library/CoreServices/Finder.app
 ```
 
-重启 SpaceLauncher 后，先手动切换到 Finder，`Command-N` 多创建几个窗口，再切换到其它应用。这时按下 `空格+F`，会切换到 Finder，不松空格，继续按 `F`，会在多个 Finder 窗口间切换。
+After restarting SpaceLauncher, switch to Finder manually, then `Command-N` to create a few windows, and then switch to another app. Now press `Space+F` to switch to Finder, without releasing space bar, continue to type `F`, the Finder windows will be cycled.
 
-注意动作名字末尾的 `.yaml` 不可省略。该动作是一个模板动作，下面会有介绍。
+Note the action name ends with `.yaml`, which can not be elided. `launch-and-cycle-windows.yaml` is a template action. Template actions' details will be given later.
 
-## 执行菜单操作 menu
+## Execute Menu Command `menu`
 
-屏幕顶部的菜单栏提供了很多操作，我们可以通过 `menu` 动作代替手动点击或者预设快捷键。
+The menu in the top of the screen provides many commands. We can execute these commands by the `menu` action.
 
 ```
 ...
   U:
-    ## 对选中文字做摘要
+    ## Summarize selected text
     menu:
       - ThisApp
       - Services
       - Summarize
 ```
 
-注意 `menu` 的参数和 `keystroke` 一样，也是一个 sequence，但因为这里菜单项的名字可能比较长，我们使用了 sequence 的另外一种格式，注意每个菜单项的名字前面都有一个连字符「- 」。
+Note the argument's type of `menu` action is the same as that of `keystroke` action, which is a sequence. The difference is that we use another sequences' format. Note that every menu item name starts with a dash and a whitespace `- `.
 
-`空格+R` 重启 SpaceLauncher，任意选中一长段文字，`空格+U` 试试效果。
+`Space+R` to relaunch SpaceLauncher, then select some long text, `Space+U` to summarize the text.
 
-## 根据当前 Finder 窗口路径打开终端 open-in-terminal
+## Open Terminal with current Finder window's path `open-in-terminal`
 
 ```
 ...
   T:
-    ## 根据当前 Finder 窗口路径打开终端
+    ## Open Terminal.app with the directory changed to current Finder window's path
     open-in-terminal:
       !!null "null"
 ```
 
-## 关闭指定应用程序 quit-app
+## Close an application `quit-app`
 
 ```
 ...
   P:
-    ## 关闭 Finder
+    ## Close Finder
     quit-app:
       com.apple.finder
 ```
 
-## 执行命令行 shell
+## Execute a command `shell`
 
 ```
 ...
   H:
-    ## 禁用所有插件打开 Chrome
+    ## Open Google Chrome with all extensions disabled.
     shell:
       '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --disable-extensions'
 ```
 
 
-# 依次按多个键执行动作 group
+# Space+X+Y+... to trigger an action `group`
 
-键盘上按得顺手的键就那么多，比如给 Google 家的各项服务都绑定了快捷键，很快就会发现键不够用了。如果能这样就好了，`空格+G+M` 打开 Gmail，`空格+G+C` 打开 Google Calendar，`空格+G+D` 打开 Google Drive。这就是 `group` 这个动作要做的。
+The handy keys on a keyboard is limited. The action `group` make it possible to group similar actions with a prefix. For example, I bound keys for several Google services, `Space+G+M` to open Gmail, `Space+G+C` for Google Calendar, `Space+G+D` for Google Drive.
 
-先看下我们当前的配置文件，`actionsByKey` 的下级是各个按键到动作的对应，这些对应同样可以放在 `group` 的下级作为其参数，从而把多个动作归为一组。
+See our configuration file at the time. `actionsByKey`'s sub-level is the mapping from keys to actions. Similarly, mappings could also be sub-levels of the action `group` as its argument, so that the multiple actions are grouped.
 
-`group` 本身是一个动作，它同时又需要作为一个按键的下级。
+At the same time, `group` itself is an action, so it should be a key's sub-level.
 
-现在删掉之前定义的 `空格+G` 打开 Google 主页的动作。
+Delete the previous definded `Space+G` open Goolge action.
 
 ```
   G:
@@ -261,7 +259,7 @@ actionsByKey:
       https://google.com
 ```
 
-替换为，
+Change it to,
 
 ```
   G:
@@ -277,15 +275,15 @@ actionsByKey:
           https://drive.google.com
 ```
 
-重启 SpaceLauncher，尝试上面的动作。
+Relaunch SpaceLauncher, try the above actions.
 
-## 嵌套多个 group
+## Nested Group
 
-上面的例子中，`空格+G+D` 是打开 Google Drive，如果我们想让 `空格+G+D+R` 打开最近使用过的的 Google Drive 文档、`空格+G+D+S` 打开加星标的文档，只需要嵌套使用 `group` 即可。
+If we want `Space+G+D+R` to open Google Drive recent files, and `Space+G+D+S` to open Google Drive starred files, we can nest groups.
 
 ```
   G:
-    ## Google 服务
+    ## Google Services
     group:
       M:
         ## Gmail
@@ -299,55 +297,51 @@ actionsByKey:
         ## Google Drive
         group:
           R:
-            ## 最近的文档
+            ## recent files
             openurl:
               https://drive.google.com/drive/recent
           S:
-            ## 加星标的文档
+            ## starred files
             openurl:
               https://drive.google.com/drive/starred
 ```
 
-你可能对这个方案并不满意，你可能更希望，
+This solution can be improved in these ways.
 
-- `空格+G+D+R` 打开最近的文档，不松空格接着按 `S` 打开加星标的文档。
+- `Space+G+D+R` open recent files, without releasing the space bar, continue to press `S` to open starred files.
 
-- `空格+G+D` 打开 Google Drive，接着按 `R` 打开最近的文档。
+- `Space+G+D` open Google Drive, without releasing the space bar, continue to press `R` to open the recent files.
 
-- `空格+G+D` 打开 Google Drive，接着按 `R` 直接在之前打开的 Google Drive 的标签页下打开最近的文档。
+- `Space+G+D` open Google Drive, without releasing the space bar, continue to press `R` to open the recent files in the same tab page.
 
-这些 SpaceLauncher 都能做到，后面会提。
+These improvements will be introduced later.
 
-# 高级动作
+# Advanced Actions
 
-这里开始，可能需要一些相关知识，但并不复杂。
-
-## 一次按键执行多个动作 actions-one-by-one actions-at-once
-
-前者是依次执行多个动作，后者是同时执行。
+## Execute multiple actions `actions-one-by-one` `actions-at-once`
 
 ```
   actions-one-by-one:
-    - 动作一:
-        参数
-    - 动作二:
-        参数
-    - 动作三:
-        参数
+    - action1:
+        argument
+    - action2:
+        argument
+    - action3:
+        argument
 ```
 
-需要注意，`actions-one-by-one` 和 `actions-at-once` 这两个动作需要跟 pair 作为其参数，不必在意什么是 pair，我们只需要注意它的格式，每个动作前面都有连字符「- 」。
+Note the argument format of `actions-one-by-one` and `actions-at-once`. The argument is a pair in YAML. Every action starts with a dash and a whitespace `- `.
 
-后面会有具体的例子。
+The example will be given later.
 
-## 相同按键在不同应用程序下执行不同动作
+## Execute different actions in different apps
 
-Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `空格+B` 把它们统一。
+The shortcuts for Bookmark Manager in Safari and Firefox are different. We will set `Space+B` to simulate the corresponding shortcuts in Safari and Firefox.
 
 ```
 ...
   B:
-    ## 浏览器的书签管理器
+    ## Bookmark Manager
     apps:
       org.mozilla.firefox:
         keystroke:
@@ -369,56 +363,59 @@ Safari 和 Firefox 的书签管理器的快捷键不一样，我们可以用 `�
             [ command, option ]
 ```
 
-应用标识符的位置处如果设置为「default」，可以对应所有其它的应用程序。
+You can set action for all other applications with `default` as the app identifier.
 
-# 模板动作
+# Template Action
 
-就像「IMHO」是「in my humble opinion」的缩写一样，模板动作就像是动作的缩写。模板动作中还可以使用一些特殊的占位符。
+Template actions provide a easy way to compose actions. You can use some special placeholders in a template action.
 
-上面的例子中，我们用 menu 动作实现了对选中文字做摘要的操作，我们可以通过模板动作对它做「缩写」。
+We implemented the function that summarizes selected text in the previous example. Now we can simplify it via template actions.
 
-新建一个文件，复制粘贴下面的配置，
+Create a new file, copy and paste the following configuration in the file.
 
 ```
-## 对选中文字做摘要
+## Summarize selected text
 menu:
   - ThisApp
   - Services
   - Summarize
 ```
 
-保存为 `~/Library/Application Support/SpaceLauncher/actions/summarize.yaml`，所有模板动作都是 YAML 文件，必须以 `.yaml` 作为文件后缀。
+Save as `~/Library/Application Support/SpaceLauncher/actions/summarize.yaml`. Template action files must be YAML format, so the file name ends with `.yaml`.
 
-所有的自定义动作都保存在 `~/Library/Application Support/SpaceLauncher/actions/` 目录下。
+Custom action files (including custom template actions) are stored in `~/Library/Application Support/SpaceLauncher/actions/`.
 
-把刚才在 `custom.yaml` 中的配置改为，
+Change `custom.yaml`,
 
 ```
 ...
   U:
-    ## 对选中的文字做摘要
+    ## Summarize selected text
     summarize.yaml:
       !!null "null"
 ```
 
-重启 SpaceLauncher。
+Restart SpaceLauncher.
 
-注意 `summarize.yaml` 被称作「模板动作」而非「动作模板」，说明它本质是动作，所以后面需要跟参数，上面例子中不需要参数，所以只需要传空参数 `!!null "null"` 即可，下面会有需要参数的例子。
+Note `summarize.yaml` is named as "template action" rather than "action template". It is essentially an action. So it should be followed by an action argument. The `summarize.yaml` in the above example does not need an informative action argument, so we pass it an empty argument `!!null "null"`. We will see the examples that require non-empty arguments.
 
 ---
 
-上面的例子更多是为了展示，除了让配置文件更清晰以外并没有直接的好处。
+The last example for template actions has no real benefits except for clarity.
 
-在前面我们提到了这样一个效果，`空格+G+D` 打开 Google Drive，不松空格接着按 `S` 在当前标签页下打开 Google Drive 中加星标的文档。
+As I metioned in [Nested Group](#nested-group), we want to improve the group action like this.
 
-为了实现这个效果，在这一章节中我们首先实现一个子功能，按下快捷键在当前标签页中打开指定链接。
+`Space+G+D` open Google Drive, without releasing the space bar, continue to press `S` to open the starred files in the same tab page.
 
-通常我们要在当前标签页下打开链接需要做这几个操作，
+To implement this feature, let's start with a part of it. Press a key to open a link in the current tab.
 
-- `Command-L` 将光标聚焦到地址栏
-- 输入地址
-- 回车
+To do this manually, we need to do these steps.
 
+- `Command-L` to focus in address text field
+- Type an address
+- Type enter key
+
+These steps can be done via some actions metioned before. For example, with the following configuration, SpaceLauncher can 
 这几个操作都可以分别用之前提到的动作实现。比如，下面的配置实现了在当前标签页下打开 `https://drive.google.com/drive/starred`。
 
 ```
